@@ -4,6 +4,7 @@ var templatePanel = require("./templates/panel.html");
 
 var View = codebox.require("hr.view");
 var $ = codebox.require("jquery");
+var dialogs = codebox.require("utils/dialogs");
 var rpc = codebox.require("core/rpc");
 
 var Controller = View.Template.extend({
@@ -39,10 +40,17 @@ var Controller = View.Template.extend({
 
         if (this.session) this.session.bye();
         this.toggle(false);
+        this.session = null;
+    },
+
+    // Define state
+    setStatus: function(msg) {
+        this.$('p').text(msg);
     },
 
     // Start a call to a number
     call: function(number) {
+        var that = this;
         this.options.number = number;
 
         // Creates the anonymous user agent so that you can make calls
@@ -68,6 +76,20 @@ var Controller = View.Template.extend({
 
         // Makes the call
         this.session = userAgent.invite('sip:'+this.options.number, options);
+        this.session.on('connecting', function (response, cause) {
+            that.setStatus('Connecting...');
+        });
+        this.session.on('progress', function (response, cause) {
+            that.setStatus('Progressing...');
+        });
+        this.session.on('failed', function (response, cause) {
+            dialogs.alert("Call Failed: "+response.reason_phrase);
+            that.hangup();
+        });
+        this.session.on('terminated', function (response, cause) {
+            console.log("Terminated", response, cause);
+            that.hangup();
+        });
 
         this.update();
         this.toggle(true);

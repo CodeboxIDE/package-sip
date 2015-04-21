@@ -7,7 +7,6 @@ var $ = codebox.require("jquery");
 var commands = codebox.require("core/commands");
 var dialogs = codebox.require("utils/dialogs");
 
-
 var controller = new Controller();
 controller.appendTo($('body'));
 
