@@ -1,0 +1,42 @@
+@controller-width: 350px;
+@controller-height: 80px;
+@controller-padding: 5px;
+
+.component-controller-sip {
+    position: fixed;
+    right: 20px;
+    bottom: 30px;
+    width: @controller-width;
+    height: @controller-height;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border-radius: 4px;
+    display: none;
+    padding: 0px;
+
+    &.visible {
+    	display: block;
+    }
+
+    .remote {
+    	position: absolute;
+    	top: @controller-padding;
+    	bottom: @controller-padding;
+    	left: @controller-padding;
+    	width: (@controller-height - 2*@controller-padding);
+    }
+
+    .inner {
+    	position: absolute;
+    	top: @controller-padding;
+    	bottom: @controller-padding;
+    	left: @controller-height;
+    	right: @controller-padding;
+
+
+    	p {
+    		margin: 6px 0px;
+    	}
+    }
+}

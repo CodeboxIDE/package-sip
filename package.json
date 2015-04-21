@@ -1,0 +1,25 @@
+{
+    "name": "sip",
+    "version": "0.0.0",
+    "description": "Panel to SIP Call",
+    "browser": "./src/index.js",
+    "engines": {
+        "codebox": ">=1.0.0-alpha"
+    },
+    "packageDependencies": {
+        "panels": "CodeboxIDE/package-panels"
+    },
+    "dependencies": {
+        "stringify": "3.1.0",
+        "sip.js": "0.6.4"
+    },
+    "browserify": {
+        "transform": [
+            [
+                "stringify", {
+                    "extensions": [".html"]
+                }
+            ]
+        ]
+    }
+}
