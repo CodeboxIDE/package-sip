@@ -24,3 +24,6 @@ commands.register({
     	});
     }
 });
+
+// Make controller accessibl by other packages
+codebox.sip = controller;

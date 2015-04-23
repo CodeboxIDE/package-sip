@@ -18,6 +18,7 @@ var Controller = View.Template.extend({
         Controller.__super__.initialize.apply(this, arguments);
 
         this.session = null;
+        this.config = {};
     },
 
     templateContext: function() {
@@ -43,6 +44,11 @@ var Controller = View.Template.extend({
         this.session = null;
     },
 
+    // Define default config
+    setConfig: function(config) {
+        this.config = config;
+    },
+
     // Define state
     setStatus: function(msg) {
         this.$('p').text(msg);
@@ -57,7 +63,7 @@ var Controller = View.Template.extend({
         var userAgent = new SIP.UA();
 
         // Here you determine whether the call has video and audio
-        var options = {
+        var options = _.defaults(this.config, {
             media: {
                 constraints: {
                     audio: true,
@@ -66,16 +72,13 @@ var Controller = View.Template.extend({
                 render: {
                     remote: {
                         video: this.$('.remote').get(0)
-                    },
-                    /*local: {
-                        video: document.getElementById('localVideo')
-                    }*/
+                    }
                 }
             }
-        };
+        });
 
         // Makes the call
-        this.session = userAgent.invite('sip:'+this.options.number, options);
+        this.session = userAgent.invite(this.options.number, options);
         this.session.on('connecting', function (response, cause) {
             that.setStatus('Connecting...');
         });
@@ -83,6 +86,7 @@ var Controller = View.Template.extend({
             that.setStatus('Progressing...');
         });
         this.session.on('failed', function (response, cause) {
+            console.log(response, cause);
             dialogs.alert("Call Failed: "+response.reason_phrase);
             that.hangup();
         });
